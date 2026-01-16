@@ -114,7 +114,7 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   trialNum++; //doesn't matter if user hit or missed, we move onto next trial
 
   //in the example code below, we can use Java Robot to move the mouse back to the middle of window
-  //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
+  robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
 }  
 
 //probably shouldn't have to edit this method
