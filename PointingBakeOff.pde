@@ -7,7 +7,6 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.Collections;
 import processing.core.PApplet;
-
 //Setting up a bunch of global variables
 int margin = 200; //set the margin around the squares
 final int padding = 50; // padding between buttons and also their width/height
