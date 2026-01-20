@@ -7,6 +7,7 @@ import java.awt.Robot;
 import java.util.ArrayList;
 import java.util.Collections;
 import processing.core.PApplet;
+
 //Setting up a bunch of global variables
 int margin = 200; //set the margin around the squares
 final int padding = 50; // padding between buttons and also their width/height
@@ -77,10 +78,18 @@ void draw()
 
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
-
-  fill(255, 0, 0, 200); // set fill color to translucent red
-  ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
+  // NEW EDIT 1/20
+  //fill(255, 0, 0, 200); // set fill color to translucent red
+  //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
+  
+  // NEW EDIT 1/20
+  for (int i = 1; i < 4; i = i+1) {
+    stroke(70);
+    line(margin - padding/2 + i * (buttonSize + padding), margin - 20, margin - padding/2 + i * (buttonSize + padding), height - margin + 30);
+    line(margin - padding/2, margin - padding/2 + i * (buttonSize + padding), width - margin + 30, margin - padding/2 + i * (buttonSize + padding));
 }
+}
+
 
 void mousePressed() //mouse was pressed! Test to see if hit was in target!
 {
@@ -99,7 +108,7 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   Rectangle bounds = getButtonLocation(trials.get(trialNum));
 
  //check to see if mouse cursor is inside target button 
-  if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) // test to see if hit was within bounds
+  if ((mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2)) // test to see if hit was within bounds
   {
     System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
     hits++; 
@@ -137,6 +146,7 @@ void drawButton(int i)
   rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
+
 void mouseMoved()
 {
    //can do stuff everytime the mouse is moved (i.e., not clicked)
@@ -154,4 +164,5 @@ void keyPressed()
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
+  //edit
 }
