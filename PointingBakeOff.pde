@@ -18,7 +18,13 @@ int startTime = 0; // time starts when the first click is captured
 int finishTime = 0; //records the time of the final click
 int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
-Robot robot; //initialized in setup 
+Robot robot; //initialized in setup
+
+// NEW EDIT 1/21
+boolean snapToCenter = false;
+boolean greenHighlight = true;
+boolean clickNear = true;
+boolean redDot = false;
 
 int numRepeats = 1; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
 
@@ -79,8 +85,11 @@ void draw()
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
   // NEW EDIT 1/20
-  //fill(255, 0, 0, 200); // set fill color to translucent red
-  //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
+  
+  if (redDot) {
+    fill(255, 0, 0, 200); // set fill color to translucent red
+    ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
+  }
   
   // NEW EDIT 1/20
   for (int i = 1; i < 4; i = i+1) {
@@ -108,7 +117,9 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   Rectangle bounds = getButtonLocation(trials.get(trialNum));
 
  //check to see if mouse cursor is inside target button 
-  if ((mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2)) // test to see if hit was within bounds
+ 
+  if ((clickNear && (mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2))
+    || (mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) // test to see if hit was within bounds
   {
     System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
     hits++; 
@@ -124,7 +135,9 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   //in the example code below, we can use Java Robot to move the mouse back to the middle of window
   // NEW EDIT 1/21
   // Note: I hardcoded the 10 and 30. For some reason, the Robot was off-center by 10 and 30. It was really annoying!
-  //robot.mouseMove(width/2 + 10, (height)/2+30);
+  if (snapToCenter) {
+    robot.mouseMove(width/2 + 10, (height)/2+30);
+  }
   //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
   //robot.mouseMove(margin - padding/2 + 2 * (buttonSize + padding), margin - padding/2 + 2 * (buttonSize + padding));
 }  
@@ -143,7 +156,7 @@ void drawButton(int i)
   Rectangle bounds = getButtonLocation(i);
 
   // NEW EDIT 1/21
-  if ((mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2)) // test to see if hit was within bounds
+  if (greenHighlight && (mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2)) // test to see if hit was within bounds
   {
     fill(0, 80, 0); // dark green
     rect(bounds.x - padding / 4, bounds.y - padding / 4, bounds.width + padding / 2, bounds.height + padding / 2);
