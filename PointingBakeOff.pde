@@ -122,7 +122,11 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   trialNum++; //doesn't matter if user hit or missed, we move onto next trial
 
   //in the example code below, we can use Java Robot to move the mouse back to the middle of window
-  robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
+  // NEW EDIT 1/21
+  // Note: I hardcoded the 10 and 30. For some reason, the Robot was off-center by 10 and 30. It was really annoying!
+  robot.mouseMove(width/2 + 10, (height)/2+30);
+  //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
+  //robot.mouseMove(margin - padding/2 + 2 * (buttonSize + padding), margin - padding/2 + 2 * (buttonSize + padding));
 }  
 
 //probably shouldn't have to edit this method
@@ -137,6 +141,15 @@ Rectangle getButtonLocation(int i) //for a given button index, what is its locat
 void drawButton(int i)
 {
   Rectangle bounds = getButtonLocation(i);
+
+  // NEW EDIT 1/21
+  if ((mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2)) // test to see if hit was within bounds
+  {
+    fill(0, 80, 0); // dark green
+    rect(bounds.x - padding / 4, bounds.y - padding / 4, bounds.width + padding / 2, bounds.height + padding / 2);
+    //fill(0, 0, 0); // black
+    //rect(bounds.x - padding / 8, bounds.y - padding / 8, bounds.width + padding / 4, bounds.height + padding / 4);
+  }
 
   if (trials.get(trialNum) == i) // see if current button is the target
     fill(0, 255, 255); // if so, fill cyan
