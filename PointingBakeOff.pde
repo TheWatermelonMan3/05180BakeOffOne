@@ -124,7 +124,7 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   //in the example code below, we can use Java Robot to move the mouse back to the middle of window
   // NEW EDIT 1/21
   // Note: I hardcoded the 10 and 30. For some reason, the Robot was off-center by 10 and 30. It was really annoying!
-  robot.mouseMove(width/2 + 10, (height)/2+30);
+  //robot.mouseMove(width/2 + 10, (height)/2+30);
   //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
   //robot.mouseMove(margin - padding/2 + 2 * (buttonSize + padding), margin - padding/2 + 2 * (buttonSize + padding));
 }  
