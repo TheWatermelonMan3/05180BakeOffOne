@@ -21,10 +21,21 @@ int misses = 0; //number of missed clicks
 Robot robot; //initialized in setup
 
 // NEW EDIT 1/21
+/*New Features*/
 boolean snapToCenter = false;
 boolean greenHighlight = true;
 boolean clickNear = true;
-boolean redDot = false;
+boolean redDot = true;
+boolean loop = true;
+/*New Features*/
+
+/*Prof. Harrison's
+boolean snapToCenter = false;
+boolean greenHighlight = false;
+boolean clickNear = false;
+boolean redDot = true;
+boolean loop = false;
+/*Prof. Harrison's*/
 
 int numRepeats = 1; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
 
@@ -81,6 +92,10 @@ void draw()
   }
 
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
+  
+  if (clickNear) {
+    text("CLICK ON A SQUARE OR NEAR A SQUARE TO CHOOSE IT", 240, 40);
+  }
 
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
@@ -96,7 +111,20 @@ void draw()
     stroke(70);
     line(margin - padding/2 + i * (buttonSize + padding), margin - 20, margin - padding/2 + i * (buttonSize + padding), height - margin + 30);
     line(margin - padding/2, margin - padding/2 + i * (buttonSize + padding), width - margin + 30, margin - padding/2 + i * (buttonSize + padding));
-}
+  }
+  
+  int tolerance = 30;
+  if (loop && !mousePressed && (mouseX < margin - tolerance - (padding / 2))) {
+    robot.mouseMove(width + (padding / 2) - margin, mouseY);
+  } else if (loop && !mousePressed && (mouseX > width + tolerance + (padding / 2) - margin)) {
+    robot.mouseMove(margin - (padding/2), mouseY);
+  }
+  if (loop && !mousePressed && (mouseY < margin - tolerance - (padding / 2))) {
+    robot.mouseMove(mouseX, height + (padding / 2) - margin);
+  } else if (loop && !mousePressed && (mouseY > height + tolerance + (padding / 2) - margin)) {
+    robot.mouseMove(mouseX, margin - (padding/2));
+  }
+  
 }
 
 
@@ -177,6 +205,7 @@ void mouseMoved()
 {
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
+   
 }
 
 void mouseDragged()
@@ -191,4 +220,7 @@ void keyPressed()
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
   //edit
+  if (loop == true && (key == 'l' || key == 'L')) {
+    loop = false;
+  }
 }
