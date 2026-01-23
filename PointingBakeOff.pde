@@ -73,7 +73,9 @@ void setup()
   //NEW EDIT 1/22
   int centerX = width/2 + 5;
   int centerY = height/2 + 70;
-  robot.mouseMove(centerX, centerY); 
+  if (snapNear == true) {
+    robot.mouseMove(centerX, centerY); 
+  }
 }
 
 
@@ -207,6 +209,9 @@ void drawButton(int i)
   rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
+
+// NEW EDIT 1/22 
+
 boolean onButton = false;
 int currX = 0;
 int currY = 0;
@@ -224,37 +229,27 @@ void checkOnButton(int mouseX, int mouseY) {
       onButton = false;
     }
   }
-  
 }
 
 void mouseMoved()
 {
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
-   checkOnButton(mouseX, mouseY);
-   print(onButton);
-   if (onButton == true) { 
-     dx = mouseX - currX;
-     dy = mouseY - currY;
+   // tried to snap to the nearest button based on direction but I couldn't figure it out...
+   //checkOnButton(mouseX, mouseY);
+   //if (onButton == true) { 
+   //  dx = mouseX - currX;
+   //  dy = mouseY - currY;
      
-     if (dx > 0 && dy < 0) {
-       robot.mouseMove(mouseX+80, mouseY-20);
-     } else if (dx > 0 && dy > 0) {
-       robot.mouseMove(mouseX+80, mouseY+140);
+   //  if (dx > 0 && dy < 0) {
+   //    robot.mouseMove(mouseX+80, mouseY-20);
+   //  } else if (dx > 0 && dy > 0) {
+   //    robot.mouseMove(mouseX+80, mouseY+140);
      //} else if (dx < 0 && dy < 0) {
      //  robot.mouseMove(mouseX-80, mouseY-20);
      //} else if (dx < 0 && dy > 0) {
      //  robot.mouseMove(mouseX-80, mouseY+140);
-     }
-     
-     
-     
-     //sourceX = 
-     //findNearestButton(mouseX, mouseY);
-     //robot.mouseMove(bestX, bestY);
-     
-     
-     
+     //}
      
    }
 }
@@ -266,12 +261,8 @@ void mouseDragged()
 }
 
 
-
-
-boolean terminate = true;
 int bestX = 0;
 int bestY = 0;
-
 int dx = 0;
 int dy = 0;
 
@@ -279,7 +270,6 @@ void findNearestButton(int mouseX, int mouseY)
 {
   int smallestX = 100000;
   int smallestY = 100000;
-  
   for (int i = 0; i < 16; i++) {
     Rectangle bounds = getButtonLocation(i);
     //print("boundsX: " + bounds.x + "    ");
@@ -300,20 +290,18 @@ void findNearestButton(int mouseX, int mouseY)
   }
 }
 
-int count = 0;
-
-
 void keyPressed() 
 {
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
-  //edit
   if (loop == true && (key == 'l' || key == 'L')) {
     loop = false;
   }
+  
+  
 //NEW EDIT 1/22
-//Snap to nearest square feature
+//Snap to nearest square feature by pressing a
  
  //checkOnButton(mouseX, mouseY);
  //checkOnButton(mouseX, mouseY);
@@ -322,7 +310,7 @@ void keyPressed()
     findNearestButton(mouseX, mouseY);
     robot.mouseMove(bestX, bestY);
     
-    
+    // other attempts to snap to nearest square
     //int centerX = width/2 + 5;
     //int centerY = height/2 + 70;
     //int startX = mouseX;
