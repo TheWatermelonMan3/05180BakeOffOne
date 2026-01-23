@@ -28,7 +28,8 @@ boolean greenHighlight = true;
 boolean clickNear = true;
 boolean redDot = true;
 boolean loop = false;
-boolean snapNear = true;
+boolean snapNear = false;
+boolean verticalSnap = true;
 /*New Features*/
 
 /*Prof. Harrison's
@@ -73,9 +74,8 @@ void setup()
   //NEW EDIT 1/22
   int centerX = width/2 + 5;
   int centerY = height/2 + 70;
-  if (snapNear == true) {
-    robot.mouseMove(centerX, centerY); 
-  }
+  robot.mouseMove(centerX, centerY); 
+  
 }
 
 
@@ -104,7 +104,11 @@ void draw()
   
   if (clickNear) {
     text("CLICK ON A SQUARE OR NEAR A SQUARE TO CHOOSE IT", 240, 40);
-  }
+    text("Press keys 1-4 to move to a vertical column.", 180, 60);
+    for (int i = 1; i < 5; i++) {
+      text(str(i), margin+buttonSize/2 + (i-1)*(padding+buttonSize), 190);
+    }
+}
 
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
@@ -251,7 +255,6 @@ void mouseMoved()
      //  robot.mouseMove(mouseX-80, mouseY+140);
      //}
      
-   }
 }
 
 void mouseDragged()
@@ -292,15 +295,26 @@ void findNearestButton(int mouseX, int mouseY)
 
 void keyPressed() 
 {
+ 
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
   if (loop == true && (key == 'l' || key == 'L')) {
     loop = false;
   }
-  
-  
+
 //NEW EDIT 1/22
+
+  if (verticalSnap == true) {
+    if (key == '1' || key == '2' || key == '3' || key == '4') {
+      int column = (int(key)-49); // for some reason, you need to subtract 49
+      robot.mouseMove(margin + buttonSize/2 + column * (padding+buttonSize), mouseY+66);
+    }
+  }
+   
+
+
+
 //Snap to nearest square feature by pressing a
  
  //checkOnButton(mouseX, mouseY);
@@ -329,6 +343,6 @@ void keyPressed()
     // //break;
     //} 
     // //terminate = true;
+    
   }
- 
 }
