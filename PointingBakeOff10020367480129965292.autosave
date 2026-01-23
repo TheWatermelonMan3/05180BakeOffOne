@@ -20,24 +20,11 @@ int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
 Robot robot; //initialized in setup
 
-
 // NEW EDIT 1/21
-/*New Features*/
 boolean snapToCenter = false;
 boolean greenHighlight = true;
 boolean clickNear = true;
 boolean redDot = true;
-boolean loop = false;
-boolean snapNear = true;
-/*New Features*/
-
-/*Prof. Harrison's
-boolean snapToCenter = false;
-boolean greenHighlight = false;
-boolean clickNear = false;
-boolean redDot = true;
-boolean loop = false;
-/*Prof. Harrison's*/
 
 int numRepeats = 1; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
 
@@ -69,11 +56,6 @@ void setup()
   System.out.println("trial order: " + trials); //print out the target list for debugging
   
   surface.setLocation(0,0);// put window in top left corner of screen (doesn't always work)
-  
-  //NEW EDIT 1/22
-  int centerX = width/2 + 5;
-  int centerY = height/2 + 70;
-  robot.mouseMove(centerX, centerY); 
 }
 
 
@@ -99,10 +81,6 @@ void draw()
   }
 
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
-  
-  if (clickNear) {
-    text("CLICK ON A SQUARE OR NEAR A SQUARE TO CHOOSE IT", 240, 40);
-  }
 
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
@@ -114,24 +92,11 @@ void draw()
   }
   
   // NEW EDIT 1/20
-  for (int i = 1; i < 4; i = i+1) {
+  for (int i = 1; i < 4; i = i+1) { // Draws the gray grid lines
     stroke(70);
     line(margin - padding/2 + i * (buttonSize + padding), margin - 20, margin - padding/2 + i * (buttonSize + padding), height - margin + 30);
     line(margin - padding/2, margin - padding/2 + i * (buttonSize + padding), width - margin + 30, margin - padding/2 + i * (buttonSize + padding));
-  }
-  
-  int tolerance = 30;
-  if (loop && !mousePressed && (mouseX < margin - tolerance - (padding / 2))) {
-    robot.mouseMove(width + (padding / 2) - margin, mouseY);
-  } else if (loop && !mousePressed && (mouseX > width + tolerance + (padding / 2) - margin)) {
-    robot.mouseMove(margin + (padding/2), mouseY);
-  }
-  if (loop && !mousePressed && (mouseY < margin - tolerance - (padding / 2))) {
-    robot.mouseMove(mouseX, height + (padding / 2) - margin);
-  } else if (loop && !mousePressed && (mouseY > height + tolerance + (padding / 2) - margin)) {
-    robot.mouseMove(mouseX, margin + (padding/2));
-  }
-  
+}
 }
 
 
@@ -207,56 +172,11 @@ void drawButton(int i)
   rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
-boolean onButton = false;
-int currX = 0;
-int currY = 0;
-
-void checkOnButton(int mouseX, int mouseY) {
-  for (int i = 0; i < 16; i++) {
-    Rectangle bounds = getButtonLocation(i);
-    if ((bounds.x < mouseX && mouseX < bounds.x + buttonSize) &&
-        (bounds.y < mouseY && mouseY < bounds.y + buttonSize)) {
-      onButton = true;
-      currX = bounds.x + buttonSize/2;
-      currY = bounds.y + buttonSize/2;
-      break;
-    } else {
-      onButton = false;
-    }
-  }
-  
-}
 
 void mouseMoved()
 {
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
-   checkOnButton(mouseX, mouseY);
-   print(onButton);
-   if (onButton == true) { 
-     dx = mouseX - currX;
-     dy = mouseY - currY;
-     
-     if (dx > 0 && dy < 0) {
-       robot.mouseMove(mouseX+80, mouseY-20);
-     } else if (dx > 0 && dy > 0) {
-       robot.mouseMove(mouseX+80, mouseY+140);
-     //} else if (dx < 0 && dy < 0) {
-     //  robot.mouseMove(mouseX-80, mouseY-20);
-     //} else if (dx < 0 && dy > 0) {
-     //  robot.mouseMove(mouseX-80, mouseY+140);
-     }
-     
-     
-     
-     //sourceX = 
-     //findNearestButton(mouseX, mouseY);
-     //robot.mouseMove(bestX, bestY);
-     
-     
-     
-     
-   }
 }
 
 void mouseDragged()
@@ -265,82 +185,10 @@ void mouseDragged()
   //https://processing.org/reference/mouseDragged_.html
 }
 
-
-
-
-boolean terminate = true;
-int bestX = 0;
-int bestY = 0;
-
-int dx = 0;
-int dy = 0;
-
-void findNearestButton(int mouseX, int mouseY)
-{
-  int smallestX = 100000;
-  int smallestY = 100000;
-  
-  for (int i = 0; i < 16; i++) {
-    Rectangle bounds = getButtonLocation(i);
-    //print("boundsX: " + bounds.x + "    ");
-    //print("mouseX: " + mouseX + "    ");
-    
-    int centerX = bounds.x + buttonSize/2;
-    int centerY = bounds.y + buttonSize/2;
-    dx = mouseX - centerX;
-    dy = mouseY - centerY;
-    int distance = abs(dx) + abs(dy);
-    int smallestDistance = abs(smallestX) + abs(smallestY);
-    if (distance < smallestDistance) {
-      smallestX = dx;
-      smallestY = dy;
-      bestX = centerX;
-      bestY = centerY+65;
-    }
-  }
-}
-
-int count = 0;
-
-
 void keyPressed() 
 {
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
   //edit
-  if (loop == true && (key == 'l' || key == 'L')) {
-    loop = false;
-  }
-//NEW EDIT 1/22
-//Snap to nearest square feature
- 
- //checkOnButton(mouseX, mouseY);
- //checkOnButton(mouseX, mouseY);
- //print("terminate:" + terminate + "    ");
-  if (snapNear == true && (key == 'a')) {
-    findNearestButton(mouseX, mouseY);
-    robot.mouseMove(bestX, bestY);
-    
-    
-    //int centerX = width/2 + 5;
-    //int centerY = height/2 + 70;
-    //int startX = mouseX;
-    //int startY = mouseY;
-    //int differenceX = mouseX - centerX; 
-    //int differenceY = mouseY - centerY;
-    //int dx = 0;
-    //int dy = 0;
-    //
-    //checkOnButton(mouseX, mouseY);
-    //if (terminate == false) {
-    //count++;
-    //print(mouseY);
-    //robot.mouseMove(mouseX + dx*30, mouseY + dy*30);
-    //terminate = true;
-    // //break;
-    //} 
-    // //terminate = true;
-  }
- 
 }
