@@ -20,16 +20,18 @@ int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
 Robot robot; //initialized in setup
 
+int notJumpFrames = 0;
 
 // NEW EDIT 1/21
 /*New Features*/
 boolean snapToCenter = false;
 boolean greenHighlight = true;
 boolean clickNear = true;
-boolean redDot = true;
+boolean redDot = false;
 boolean loop = false;
 boolean snapNear = false;
-boolean verticalSnap = true;
+boolean verticalSnap = false;
+boolean bigJump = false; // Do not use this feature, it does not work!!!
 /*New Features*/
 
 /*Prof. Harrison's
@@ -82,6 +84,7 @@ void setup()
 void draw()
 {
   background(0); //black out the window each time we draw.
+  noStroke();
   fill(255); //set fill color to white
 
   if (trialNum >= trials.size()) //check to see if user study is over
@@ -104,15 +107,57 @@ void draw()
   
   if (clickNear) {
     text("CLICK ON A SQUARE OR NEAR A SQUARE TO CHOOSE IT", 240, 40);
+}
+
+  if (verticalSnap) {
     text("Press keys 1-4 to move to a vertical column.", 180, 60);
     for (int i = 1; i < 5; i++) {
       text(str(i), margin+buttonSize/2 + (i-1)*(padding+buttonSize), 190);
     }
-}
+  }
 
   for (int i = 0; i < 16; i++)// for all buttons
     drawButton(i); //draw button
   // NEW EDIT 1/20
+  
+  if (bigJump) {
+    if (notJumpFrames >= 20 && sqrt(pow(mouseX - pmouseX,2) + pow(mouseY - pmouseY,2)) > 20){
+      int oldx = ((mouseX - margin + padding/2) / (padding + buttonSize));
+      int oldy = ((mouseY - margin + padding/2) / (padding + buttonSize));
+      int xnow = oldx;
+      int ynow = oldy;
+      float angle = atan2((float) mouseY - pmouseY, (float) mouseX - pmouseX);
+      int roundedAngle = (int) ((angle / QUARTER_PI)+0.5);
+      if (angle == 0 && oldx < 3) {
+        xnow += 1;
+      } else if (angle == 1 && oldx < 3 && oldy < 3) {
+        xnow += 1;
+        ynow += 1;
+      } else if (angle == 2 && oldy < 3) {
+        ynow += 1;
+      } else if (angle == 3 && oldx > 0 && oldy < 3) {
+        xnow -= 1;
+        ynow += 1;
+      } else if (angle == 4 && oldx > 0) {
+        xnow -= 1;
+      } else if (angle == -3 && oldx > 0 && oldy > 0) {
+        xnow -= 1;
+        ynow -= 1;
+      } else if (angle == -2 && oldy > 0) {
+        ynow -= 1;
+      } else if (angle == -1 && oldx < 3  && oldy > 0) {
+        xnow += 1;
+        ynow -= 1;
+      }
+      System.out.println("(" + notJumpFrames + ") The mouse moved away from (" + oldx + ", " + oldy + ") at an angle " + roundedAngle + " times pi/4 and moved to (" + xnow + ", " + ynow + ")");
+      robot.mouseMove(margin + (padding+buttonSize)/2 + xnow * (padding + buttonSize), margin + (padding+buttonSize)/2 + ynow * (padding + buttonSize));
+      notJumpFrames = 0;
+    } else if (notJumpFrames < 20) {
+      notJumpFrames++;
+      fill(255, 235, 0, 200); // set fill color to translucent yellow
+      ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
+    }
+  }
   
   if (redDot) {
     fill(255, 0, 0, 200); // set fill color to translucent red
@@ -121,10 +166,19 @@ void draw()
   
   // NEW EDIT 1/20
   for (int i = 1; i < 4; i = i+1) {
+    strokeWeight(4);
     stroke(70);
     line(margin - padding/2 + i * (buttonSize + padding), margin - 20, margin - padding/2 + i * (buttonSize + padding), height - margin + 30);
     line(margin - padding/2, margin - padding/2 + i * (buttonSize + padding), width - margin + 30, margin - padding/2 + i * (buttonSize + padding));
   }
+  
+  if (verticalSnap) {
+    strokeWeight(12);
+    stroke(255, 0, 0, 200);
+    line(margin - padding/2, mouseY, width - margin + padding/2, mouseY);
+  }
+  
+  noStroke();
   
   int tolerance = 30;
   if (loop && !mousePressed && (mouseX < margin - tolerance - (padding / 2))) {
@@ -299,8 +353,9 @@ void keyPressed()
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
-  if (loop == true && (key == 'l' || key == 'L')) {
+  if ((key == 'l' || key == 'L')) {
     loop = false;
+    bigJump = false;
   }
 
 //NEW EDIT 1/22
