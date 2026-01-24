@@ -27,11 +27,15 @@ int notJumpFrames = 0;
 boolean snapToCenter = false;
 boolean greenHighlight = true;
 boolean clickNear = true;
-boolean redDot = false;
+boolean redDot = true;
 boolean loop = false;
-boolean snapNear = false;
+boolean snapNear = true;
 boolean verticalSnap = false;
 boolean bigJump = false; // Do not use this feature, it does not work!!!
+boolean brightColor = true;
+boolean horizGuideLine = false;
+boolean vertiGuideLine = false;
+boolean nextPreview = true;
 /*New Features*/
 
 /*Prof. Harrison's
@@ -172,10 +176,15 @@ void draw()
     line(margin - padding/2, margin - padding/2 + i * (buttonSize + padding), width - margin + 30, margin - padding/2 + i * (buttonSize + padding));
   }
   
-  if (verticalSnap) {
+  if (horizGuideLine) {
     strokeWeight(12);
     stroke(255, 0, 0, 200);
     line(margin - padding/2, mouseY, width - margin + padding/2, mouseY);
+  }
+  if (vertiGuideLine) {
+    strokeWeight(12);
+    stroke(255, 0, 0, 200);
+    line(mouseX, margin - padding/2, mouseX, width - margin + padding/2);
   }
   
   noStroke();
@@ -259,12 +268,27 @@ void drawButton(int i)
     //rect(bounds.x - padding / 8, bounds.y - padding / 8, bounds.width + padding / 4, bounds.height + padding / 4);
   }
 
-  if (trials.get(trialNum) == i) // see if current button is the target
-    fill(0, 255, 255); // if so, fill cyan
-  else
+  if (trials.get(trialNum) == i) { // see if current button is the target
+    if (brightColor) {
+      fill(255, 200, 0); // fill orange
+    } else {
+      fill(0, 255, 255); // if so, fill cyan
+    }
+    rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
+  } else if (nextPreview && trialNum < trials.size() - 1 && trials.get(trialNum + 1) == i) {
+    if (brightColor) {
+      fill(200, 155, 130); // fill dim orange
+    } else {
+      fill(150, 200, 200); // if so, fill dim cyan
+    }
+    rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
+    fill(0);
+    text("next", bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+  } else {
     fill(200); // if not, fill gray
+    rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
+  }
 
-  rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
 
@@ -375,7 +399,7 @@ void keyPressed()
  //checkOnButton(mouseX, mouseY);
  //checkOnButton(mouseX, mouseY);
  //print("terminate:" + terminate + "    ");
-  if (snapNear == true && (key == 'a')) {
+  if (snapNear == true && (key == 'a') || (key == 'A')) {
     findNearestButton(mouseX, mouseY);
     robot.mouseMove(bestX, bestY);
     
