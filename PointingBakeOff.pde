@@ -36,6 +36,7 @@ boolean brightColor = true;
 boolean horizGuideLine = false;
 boolean vertiGuideLine = false;
 boolean nextPreview = true;
+boolean spaceToClick = true;
 /*New Features*/
 
 /*Prof. Harrison's
@@ -380,6 +381,11 @@ void keyPressed()
   if ((key == 'l' || key == 'L')) {
     loop = false;
     bigJump = false;
+  }
+  
+  if (key == ' ' && spaceToClick) {
+    System.out.println("Spacebar");
+    mousePressed();
   }
 
 //NEW EDIT 1/22
