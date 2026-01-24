@@ -278,7 +278,7 @@ void drawButton(int i)
     rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
   } else if (nextPreview && trialNum < trials.size() - 1 && trials.get(trialNum + 1) == i) {
     if (brightColor) {
-      fill(200, 155, 130); // fill dim orange
+      fill(160, 145, 120); // fill dim orange
     } else {
       fill(150, 200, 200); // if so, fill dim cyan
     }
