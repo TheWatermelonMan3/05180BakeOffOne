@@ -45,6 +45,14 @@ boolean greenHighlight = false;
 boolean clickNear = false;
 boolean redDot = true;
 boolean loop = false;
+boolean snapNear = false;
+boolean verticalSnap = false;
+boolean bigJump = false; // Do not use this feature, it does not work!!!
+boolean brightColor = false;
+boolean horizGuideLine = false;
+boolean vertiGuideLine = false;
+boolean nextPreview = false;
+boolean spaceToClick = false;
 /*Prof. Harrison's*/
 
 int numRepeats = 1; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
