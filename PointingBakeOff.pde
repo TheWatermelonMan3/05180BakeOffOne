@@ -22,6 +22,8 @@ Robot robot; //initialized in setup
 
 int notJumpFrames = 0;
 
+int beginTime;
+
 // NEW EDIT 1/21
 /*New Features*/
 boolean snapToCenter = false;
@@ -162,7 +164,7 @@ void draw()
         xnow += 1;
         ynow -= 1;
       }
-      System.out.println("(" + notJumpFrames + ") The mouse moved away from (" + oldx + ", " + oldy + ") at an angle " + roundedAngle + " times pi/4 and moved to (" + xnow + ", " + ynow + ")");
+      //System.out.println("(" + notJumpFrames + ") The mouse moved away from (" + oldx + ", " + oldy + ") at an angle " + roundedAngle + " times pi/4 and moved to (" + xnow + ", " + ynow + ")");
       robot.mouseMove(margin + (padding+buttonSize)/2 + xnow * (padding + buttonSize), margin + (padding+buttonSize)/2 + ynow * (padding + buttonSize));
       notJumpFrames = 0;
     } else if (notJumpFrames < 20) {
@@ -213,7 +215,7 @@ void draw()
 }
 
 //OUTPUT VARIABLES:
-int participantID = 1; // We can do Zoey: 1 and Josiah: 2 -- change based on whose testing
+int participantID = 2; // We can do Zoey: 1 and Josiah: 2 -- change based on whose testing
 int startMouseX;
 int startMouseY;
 float time;
@@ -277,18 +279,18 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
 
   int targetX = (bounds.x+bounds.width/2); // x position of center of target
   int targetY = (bounds.y+bounds.height/2); // y position of center of target
-  int dx = abs(mouseX - targetX);
-  int dy = abs(mouseY - targetY);
+  int dx = abs(startMouseX - targetX);
+  int dy = abs(startMouseY - targetY);
   double distance = Math.sqrt(dx*dx + dy*dy);
   int intDistance = (int) distance;
   
   if (trialNum == 0) {
     time = 0;
   }
-  int timeAfterClick = millis();
-  time = (timeAfterClick - time)*0.001;
+  int timeAfterClick = millis() - beginTime;
+  beginTime = millis();
   
-  float roundedTime = (float) Math.round(time * 1000) / 1000.0f;
+  float roundedTime = timeAfterClick / 1000f;
 
   int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance, 40};
   for (int i = 0; i < items.length; i++) {
