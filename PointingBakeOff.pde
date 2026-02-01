@@ -444,7 +444,7 @@ void keyPressed()
   }
   
   if (key == ' ' && spaceToClick) {
-    System.out.println("Spacebar");
+    //System.out.println("Spacebar");
     mousePressed();
   }
 
