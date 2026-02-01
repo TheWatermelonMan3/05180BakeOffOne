@@ -55,11 +55,7 @@ boolean nextPreview = false;
 boolean spaceToClick = false;
 /*Prof. Harrison's*/
 
-<<<<<<< HEAD
 int numRepeats = 20; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
-=======
-int numRepeats = 5; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
->>>>>>> 8c15a6af976e26ed4d5693cfe7c4a9ec840f8ceb
 
 void setup()
 {
@@ -86,7 +82,7 @@ void setup()
     for (int k = 0; k < numRepeats; k++) //loop for the number of times each button repeats. Scaffold code default is 1, but it will be higher in the actual bakeoff.
       trials.add(i);
   Collections.shuffle(trials); //randomize the order of the targets
-  System.out.println("trial order: " + trials); //print out the target list for debugging
+  //System.out.println("trial order: " + trials); //print out the target list for debugging
   
   surface.setLocation(0,0);// put window in top left corner of screen (doesn't always work)
   
@@ -294,8 +290,8 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   
   float roundedTime = (float) Math.round(time * 1000) / 1000.0f;
 
-  int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance};
-  for (int i = 0; i < items.length-2; i++) {
+  int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance, width};
+  for (int i = 0; i < items.length; i++) {
     print(items[i]);
     print(',');
   }
