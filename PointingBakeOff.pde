@@ -55,7 +55,7 @@ boolean nextPreview = false;
 boolean spaceToClick = false;
 /*Prof. Harrison's*/
 
-int numRepeats = 1; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
+int numRepeats = 20; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
 
 void setup()
 {
@@ -212,9 +212,17 @@ void draw()
   
 }
 
+//OUTPUT VARIABLES:
+int participantID = 1; // We can do Zoey: 1 and Josiah: 2 -- change based on whose testing
+int startMouseX;
+int startMouseY;
+float time;
+int successOrFail;
+
 
 void mousePressed() //mouse was pressed! Test to see if hit was in target!
 {
+  
   if (trialNum >= trials.size()) //if task is over, just return
     return;
 
@@ -224,23 +232,28 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   if (trialNum == trials.size() - 1) //check if final click
   {
     finishTime = millis();
+    
     println("we're done!"); //write to terminal some output. Useful for debugging too.
   }
 
   Rectangle bounds = getButtonLocation(trials.get(trialNum));
+
 
  //check to see if mouse cursor is inside target button 
  
   if ((clickNear && (mouseX > bounds.x - padding/2 && mouseX < bounds.x + bounds.width + padding/2) && (mouseY > bounds.y - padding/2 && mouseY < bounds.y + bounds.height + padding/2))
     || (mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) // test to see if hit was within bounds
   {
-    System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
+    //System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
     hits++; 
+    successOrFail = 1;
+    
   } 
   else //must be a miss...
   {
-    System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
+    //System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
     misses++;
+    successOrFail = 0;
   }
 
   trialNum++; //doesn't matter if user hit or missed, we move onto next trial
@@ -253,6 +266,45 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   }
   //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
   //robot.mouseMove(margin - padding/2 + 2 * (buttonSize + padding), margin - padding/2 + 2 * (buttonSize + padding));
+
+  // OUTPUT PRINT STATEMENT
+  
+  // set the mouse position at be center of screen for trial 0
+  if (trialNum == 0) {
+    startMouseX = width/2 + 5;
+    startMouseY = height/2 + 70;
+  }
+
+  int targetX = (bounds.x+bounds.width/2); // x position of center of target
+  int targetY = (bounds.y+bounds.height/2); // y position of center of target
+  int dx = abs(mouseX - targetX);
+  int dy = abs(mouseY - targetY);
+  double distance = Math.sqrt(dx*dx + dy*dy);
+  int intDistance = (int) distance;
+  
+  if (trialNum == 0) {
+    time = 0;
+  }
+  int timeAfterClick = millis();
+  time = (timeAfterClick - time)*0.001;
+  
+  float roundedTime = (float) Math.round(time * 1000) / 1000.0f;
+
+  int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance};
+  for (int i = 0; i < items.length-2; i++) {
+    print(items[i]);
+    print(',');
+  }
+  print(roundedTime);
+  print(',');
+  print(successOrFail);
+  println("");
+  
+  if (trialNum != 0) { // set mouse position at start of trial to mouse position of last click
+    startMouseX = mouseX;
+    startMouseY = mouseY;
+  }
+ 
 }  
 
 //probably shouldn't have to edit this method
