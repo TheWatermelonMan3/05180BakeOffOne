@@ -290,7 +290,7 @@ void mousePressed() //mouse was pressed! Test to see if hit was in target!
   
   float roundedTime = (float) Math.round(time * 1000) / 1000.0f;
 
-  int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance, width};
+  int[] items = {trialNum, participantID, startMouseX, startMouseY, targetX, targetY, intDistance, 40};
   for (int i = 0; i < items.length; i++) {
     print(items[i]);
     print(',');
