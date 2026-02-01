@@ -55,7 +55,11 @@ boolean nextPreview = false;
 boolean spaceToClick = false;
 /*Prof. Harrison's*/
 
+<<<<<<< HEAD
 int numRepeats = 20; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
+=======
+int numRepeats = 5; //sets the number of times each button repeats in the user study. 1 = each square will appear as the target once.
+>>>>>>> 8c15a6af976e26ed4d5693cfe7c4a9ec840f8ceb
 
 void setup()
 {
